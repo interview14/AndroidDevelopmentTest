@@ -81,7 +81,7 @@ public class DetailActivity extends BaseActivity {
                 String error;
                 switch (errorCode) {
                     case 1:
-                        error = getString(R.string.empty_follower_url);
+                        error = getString(R.string.follower_not_found);
                         break;
                     default:
                         error = getString(R.string.service_unavailable);
@@ -90,8 +90,13 @@ public class DetailActivity extends BaseActivity {
                 showAlertDialog(getString(R.string.title_alert), error, DetailActivity.this);
             }
         });
-        detailPresenter.getFollowers(searchDetailModel.getFollowers_url());
-        showLoading();
+
+        if (haveInternet(DetailActivity.this)) {
+            showLoading();
+            detailPresenter.getFollowers(searchDetailModel.getFollowers_url());
+        } else {
+            showAlertDialog(getString(R.string.title_alert), getString(R.string.internet_problem), DetailActivity.this);
+        }
     }
 
     void setFollowersDetail(List<FollowerDetailModel> followerDetailModelList) {
@@ -120,7 +125,10 @@ public class DetailActivity extends BaseActivity {
                 String error;
                 switch (errorCode) {
                     case 1:
-                        error = getString(R.string.empty_follower_url);
+                        error = getString(R.string.avatar_not_found);
+                        break;
+                    case 2:
+                        error = getString(R.string.avatar_load_error);
                         break;
                     default:
                         error = getString(R.string.service_unavailable);
@@ -129,7 +137,12 @@ public class DetailActivity extends BaseActivity {
                 showAlertDialog(getString(R.string.title_alert), error, DetailActivity.this);
             }
         });
-        detailPresenter.getImage(searchDetailModel.getAvatar_url());
-        showLoading();
+
+        if (haveInternet(DetailActivity.this)) {
+            showLoading();
+            detailPresenter.getImage(searchDetailModel.getAvatar_url());
+        } else {
+            showAlertDialog(getString(R.string.title_alert), getString(R.string.internet_problem), DetailActivity.this);
+        }
     }
 }

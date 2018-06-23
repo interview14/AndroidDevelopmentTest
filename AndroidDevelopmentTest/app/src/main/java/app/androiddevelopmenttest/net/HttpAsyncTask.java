@@ -1,6 +1,7 @@
 package app.androiddevelopmenttest.net;
 
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -59,10 +60,12 @@ public class HttpAsyncTask extends AsyncTask<String, Integer, String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-        if (response != null) {
-            communicationManager.onResponse(response);
-        } else {
+        if (TextUtils.isEmpty(response) ||
+                response.equals("{}") ||
+                response.equals("[]")) {
             communicationManager.onError();
+        } else {
+            communicationManager.onResponse(response);
         }
     }
 }

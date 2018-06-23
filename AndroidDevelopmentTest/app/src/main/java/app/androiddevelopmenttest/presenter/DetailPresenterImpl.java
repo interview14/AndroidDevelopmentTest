@@ -27,31 +27,28 @@ public class DetailPresenterImpl {
     }
 
     public void getFollowers(String followersUrl) {
-        if (TextUtils.isEmpty(followersUrl)) {
+        if (TextUtils.isEmpty(followersUrl) || followersUrl.equals("null")) {
             detailPresenter.showError(1);
         } else {
             new HttpAsyncTask(new CommunicationManager<List<FollowerDetailModel>>() {
                 @Override
                 public void onResponse(String response) {
-                    if (TextUtils.isEmpty(response)) {
-                        detailPresenter.showError(0);
-                    } else {
-                        try {
-                            JSONArray jsonArray = new JSONArray(response);
-                            List<FollowerDetailModel> followerDetailModelList = new ArrayList<>();
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                final FollowerDetailModel followerDetailModel = new FollowerDetailModel();
-                                followerDetailModel.setAvatar_url(jsonObject.getString(Constants.WebServiceKeys.AVATAR_URL));
-                                followerDetailModel.setLogin(jsonObject.getString(Constants.WebServiceKeys.LOGIN));
-                                getImage(followerDetailModel);
-                                followerDetailModelList.add(followerDetailModel);
-                            }
-                            onProcessNext(followerDetailModelList);
-                        } catch (Exception e) {
-                            detailPresenter.showError(0);
+                    try {
+                        JSONArray jsonArray = new JSONArray(response);
+                        List<FollowerDetailModel> followerDetailModelList = new ArrayList<>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            final FollowerDetailModel followerDetailModel = new FollowerDetailModel();
+                            followerDetailModel.setAvatar_url(jsonObject.getString(Constants.WebServiceKeys.AVATAR_URL));
+                            followerDetailModel.setLogin(jsonObject.getString(Constants.WebServiceKeys.LOGIN));
+                            getImage(followerDetailModel);
+                            followerDetailModelList.add(followerDetailModel);
                         }
+                        onProcessNext(followerDetailModelList);
+                    } catch (Exception e) {
+                        detailPresenter.showError(0);
                     }
+
                 }
 
                 @Override
@@ -61,7 +58,7 @@ public class DetailPresenterImpl {
 
                 @Override
                 public void onError() {
-                    detailPresenter.showError(0);
+                    detailPresenter.showError(1);
                 }
             }).execute(followersUrl);
         }
@@ -70,7 +67,7 @@ public class DetailPresenterImpl {
     private void getImage(final FollowerDetailModel followerDetailModel) {
         String url = followerDetailModel.getAvatar_url();
 
-        if (TextUtils.isEmpty(url)) {
+        if (TextUtils.isEmpty(url) || url.equals("null")) {
             followerDetailModel.setAvatar(null);
         } else {
             new LoadImageAsyncTask(new CommunicationManager<Bitmap>() {
@@ -93,7 +90,7 @@ public class DetailPresenterImpl {
     }
 
     public void getImage(String url) {
-        if (TextUtils.isEmpty(url)) {
+        if (TextUtils.isEmpty(url) || url.equals("null")) {
             detailPresenter.showError(1);
         } else {
             new LoadImageAsyncTask(new CommunicationManager<Bitmap>() {
@@ -109,7 +106,7 @@ public class DetailPresenterImpl {
 
                 @Override
                 public void onError() {
-                    detailPresenter.showError(0);
+                    detailPresenter.showError(2);
                 }
             }).execute(url);
         }

@@ -3,11 +3,14 @@
     <string name="user_detail">User Detail</string>
     <string name="followers_detail">Followers Detail</string>
     <string name="hint_search">Search by username or email</string>
+    <string name="user_not_found">User not found.</string>
+    <string name="follower_not_found">This user have no follower.</string>
+    <string name="avatar_not_found">Avatar not found.</string>
+    <string name="avatar_load_error">Unable to load avatar.</string>
     <string name="empty_search_field">Search field is empty.</string>
-    <string name="empty_follower_url">This user have no followers.</string>
     <string name="title_alert">Alert</string>
-    <string name="title_internet_problem">There is no or poor internet connection. Please connect to stable internet connection and try again.</string>
     <string name="title_please_wait">Please wait</string>
-    <string name="title_seaching">Searching...</string>
+    <string name="seaching">Searching...</string>
+    <string name="internet_problem">There is no or poor internet connection. Please connect to stable internet connection and try again.</string>
     <string name="service_unavailable">Service is temporarily not available. Please try again later.</string>
 </resources>

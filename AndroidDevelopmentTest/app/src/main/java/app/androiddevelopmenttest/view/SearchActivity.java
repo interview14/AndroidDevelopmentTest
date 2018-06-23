@@ -49,6 +49,9 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                     case 1:
                         error = getString(R.string.empty_search_field);
                         break;
+                    case 2:
+                        error = getString(R.string.user_not_found);
+                        break;
                     default:
                         error = getString(R.string.service_unavailable);
                         break;
@@ -56,8 +59,13 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 showAlertDialog(getString(R.string.title_alert), error, SearchActivity.this);
             }
         });
-        searchPresenter.doSearch(et_search.getText().toString());
-        showLoading();
+
+        if (haveInternet(SearchActivity.this)) {
+            showLoading();
+            searchPresenter.doSearch(et_search.getText().toString());
+        } else {
+            showAlertDialog(getString(R.string.title_alert), getString(R.string.internet_problem), SearchActivity.this);
+        }
     }
 
     void moveToDetailScreen(SearchDetailModel searchDetailModel) {
