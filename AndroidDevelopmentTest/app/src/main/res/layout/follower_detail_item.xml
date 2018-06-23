@@ -10,8 +10,8 @@
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/iv_follower_avatar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/avatar_width"
+            android:layout_height="@dimen/avatar_height"
             android:background="@drawable/ic_person_stub" />
 
         <android.support.v7.widget.AppCompatTextView
@@ -21,7 +21,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:textColor="@color/black"
-            android:textSize="15sp" />
+            android:textSize="20sp" />
 
     </LinearLayout>
 

@@ -51,16 +51,16 @@ public class DetailActivity extends BaseActivity {
     void setUserDetail() {
         if (TextUtils.isEmpty(searchDetailModel.getName())
                 || searchDetailModel.getName().equals("null")) {
-            tv_user_name.setText("Name: " + searchDetailModel.getLogin());
+            tv_user_name.setText(searchDetailModel.getLogin());
         } else {
-            tv_user_name.setText("Name: " + searchDetailModel.getName());
+            tv_user_name.setText(searchDetailModel.getName());
         }
 
         if (TextUtils.isEmpty(searchDetailModel.getEmail()) ||
                 searchDetailModel.getEmail().equals("null")) {
-            tv_user_email.setText("Email: - ");
+            tv_user_email.setText(" - ");
         } else {
-            tv_user_email.setText("Email: " + searchDetailModel.getEmail());
+            tv_user_email.setText(searchDetailModel.getEmail());
         }
 
         getUserAvatar();
