@@ -44,7 +44,7 @@ public class BaseActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT < 21) {
                 loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
             }
-            loadingDialog.setMessage(getString(R.string.title_seaching));
+            loadingDialog.setMessage(getString(R.string.seaching));
             loadingDialog.setCancelable(false);
             loadingDialog.setIndeterminate(false);
         }
