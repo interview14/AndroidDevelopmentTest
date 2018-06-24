@@ -12,14 +12,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.SearchActivity">
+        <activity
+            android:name=".view.SearchActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.DetailActivity"></activity>
+        <activity
+            android:name=".view.DetailActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
     </application>
 
 </manifest>

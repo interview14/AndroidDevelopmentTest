@@ -38,10 +38,9 @@ public class DetailPresenterImpl {
                         List<FollowerDetailModel> followerDetailModelList = new ArrayList<>();
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            final FollowerDetailModel followerDetailModel = new FollowerDetailModel();
+                            FollowerDetailModel followerDetailModel = new FollowerDetailModel();
                             followerDetailModel.setAvatar_url(jsonObject.getString(Constants.WebServiceKeys.AVATAR_URL));
                             followerDetailModel.setLogin(jsonObject.getString(Constants.WebServiceKeys.LOGIN));
-                            getImage(followerDetailModel);
                             followerDetailModelList.add(followerDetailModel);
                         }
                         onProcessNext(followerDetailModelList);
@@ -64,7 +63,7 @@ public class DetailPresenterImpl {
         }
     }
 
-    private void getImage(final FollowerDetailModel followerDetailModel) {
+    public void getImage(final FollowerDetailModel followerDetailModel) {
         String url = followerDetailModel.getAvatar_url();
 
         if (TextUtils.isEmpty(url) || url.equals("null")) {
@@ -79,11 +78,13 @@ public class DetailPresenterImpl {
                 @Override
                 public void onProcessNext(Bitmap response) {
                     followerDetailModel.setAvatar(response);
+                    detailPresenter.showData(response);
                 }
 
                 @Override
                 public void onError() {
                     followerDetailModel.setAvatar(null);
+                    detailPresenter.showData(null);
                 }
             }).execute(url);
         }
@@ -96,7 +97,6 @@ public class DetailPresenterImpl {
             new LoadImageAsyncTask(new CommunicationManager<Bitmap>() {
                 @Override
                 public void onResponse(String response) {
-
                 }
 
                 @Override

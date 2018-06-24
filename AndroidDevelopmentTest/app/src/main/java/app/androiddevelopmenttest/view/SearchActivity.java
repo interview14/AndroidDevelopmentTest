@@ -1,10 +1,12 @@
 package app.androiddevelopmenttest.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageButton;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import app.androiddevelopmenttest.R;
 import app.androiddevelopmenttest.model.SearchDetailModel;
@@ -33,6 +35,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
+        hideKeyboard();
         SearchPresenterImpl searchPresenter = new SearchPresenterImpl(new SearchPresenter() {
             @Override
             public void showDetail(SearchDetailModel searchDetailModel) {
@@ -61,7 +64,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         });
 
         if (haveInternet(SearchActivity.this)) {
-            showLoading();
+            showLoading(getString(R.string.seaching));
             searchPresenter.doSearch(et_search.getText().toString());
         } else {
             showAlertDialog(getString(R.string.title_alert), getString(R.string.internet_problem), SearchActivity.this);
@@ -72,6 +75,15 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         Intent intent = new Intent(SearchActivity.this, DetailActivity.class);
         intent.putExtra(Constants.IntentKeys.SEARCH_DETAIL_MODEL, searchDetailModel);
         startActivityForResult(intent, 0);
+    }
+
+    void hideKeyboard(){
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            assert imm != null;
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     @Override

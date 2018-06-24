@@ -24,6 +24,7 @@ public class DetailActivity extends BaseActivity {
     private AppCompatImageView iv_user_avatar;
     private AppCompatTextView tv_user_name, tv_user_email;
     private RecyclerView rv_followers_detail;
+    private CustomFollowerDetailAdapter followerDetailAdapter;
     private SearchDetailModel searchDetailModel;
 
     @Override
@@ -63,7 +64,7 @@ public class DetailActivity extends BaseActivity {
             tv_user_email.setText(searchDetailModel.getEmail());
         }
 
-        getUserAvatar();
+        updateUserAvatar();
     }
 
     void getFollowersDetail() {
@@ -72,6 +73,7 @@ public class DetailActivity extends BaseActivity {
             public void showData(List<FollowerDetailModel> followerDetailModelList) {
                 hideLoading();
                 setFollowersDetail(followerDetailModelList);
+                updateFollowersAvatar(followerDetailModelList);
             }
 
             @Override
@@ -92,7 +94,7 @@ public class DetailActivity extends BaseActivity {
         });
 
         if (haveInternet(DetailActivity.this)) {
-            showLoading();
+            showLoading(getString(R.string.fetch_data));
             detailPresenter.getFollowers(searchDetailModel.getFollowers_url());
         } else {
             showAlertDialog(getString(R.string.title_alert), getString(R.string.internet_problem), DetailActivity.this);
@@ -100,8 +102,8 @@ public class DetailActivity extends BaseActivity {
     }
 
     void setFollowersDetail(List<FollowerDetailModel> followerDetailModelList) {
-        CustomFollowerDetailAdapter adapter = new CustomFollowerDetailAdapter(followerDetailModelList, this);
-        rv_followers_detail.setAdapter(adapter);
+        followerDetailAdapter = new CustomFollowerDetailAdapter(followerDetailModelList, this);
+        rv_followers_detail.setAdapter(followerDetailAdapter);
         rv_followers_detail.setLayoutManager(new LinearLayoutManager(this));
 
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
@@ -110,17 +112,48 @@ public class DetailActivity extends BaseActivity {
         rv_followers_detail.setItemAnimator(itemAnimator);
     }
 
-    void getUserAvatar() {
+    void updateUserAvatar() {
         DetailPresenterImpl detailPresenter = new DetailPresenterImpl(new DetailPresenter<Bitmap>() {
             @Override
             public void showData(Bitmap bitmap) {
-                hideLoading();
                 iv_user_avatar.setImageBitmap(bitmap);
             }
 
             @Override
             public void showError(int errorCode) {
-                hideLoading();
+                String error;
+                switch (errorCode) {
+                    case 1:
+                        error = getString(R.string.avatar_not_found);
+                        break;
+                    case 2:
+                        error = getString(R.string.avatar_load_error);
+                        break;
+                    default:
+                        error = getString(R.string.service_unavailable);
+                        break;
+                }
+                showAlertDialog(getString(R.string.title_alert), error, DetailActivity.this);
+            }
+        });
+
+        if (haveInternet(DetailActivity.this)) {
+            detailPresenter.getImage(searchDetailModel.getAvatar_url());
+        } else {
+            showAlertDialog(getString(R.string.title_alert), getString(R.string.internet_problem), DetailActivity.this);
+        }
+    }
+
+    void updateFollowersAvatar(List<FollowerDetailModel> followerDetailModelList) {
+        DetailPresenterImpl detailPresenter = new DetailPresenterImpl(new DetailPresenter<Bitmap>() {
+            @Override
+            public void showData(Bitmap bitmap) {
+                followerDetailAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void showError(int errorCode) {
+                followerDetailAdapter.notifyDataSetChanged();
 
                 String error;
                 switch (errorCode) {
@@ -139,8 +172,9 @@ public class DetailActivity extends BaseActivity {
         });
 
         if (haveInternet(DetailActivity.this)) {
-            showLoading();
-            detailPresenter.getImage(searchDetailModel.getAvatar_url());
+            for (int i = 0; i < followerDetailModelList.size(); i++) {
+                detailPresenter.getImage(followerDetailModelList.get(i));
+            }
         } else {
             showAlertDialog(getString(R.string.title_alert), getString(R.string.internet_problem), DetailActivity.this);
         }

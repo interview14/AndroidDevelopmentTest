@@ -37,14 +37,14 @@ public class BaseActivity extends AppCompatActivity {
         return false;
     }
 
-    public void showLoading() {
+    public void showLoading(String msg) {
         if (loadingDialog == null) {
             loadingDialog = new ProgressDialog(this, R.style.DialogTheme);
             loadingDialog.setTitle(getString(R.string.title_please_wait));
             if (Build.VERSION.SDK_INT < 21) {
                 loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
             }
-            loadingDialog.setMessage(getString(R.string.seaching));
+            loadingDialog.setMessage(msg);
             loadingDialog.setCancelable(false);
             loadingDialog.setIndeterminate(false);
         }
